@@ -9,7 +9,7 @@ export class InspireTMS {
   private readonly _baseURL: string;
 
   constructor(app: { name: string; } | { base: string; }) {
-    this._baseURL = "base" in app ? app.base : BASE_PATH.replace("_", app.name);
+    this._baseURL = "base" in app ? app.base.replace(/\/+$/, "") : BASE_PATH.replace("_", app.name);
     this._loadTenderAPI = new LoadTendersApi(undefined, this._baseURL);
   }
 
