@@ -33,7 +33,7 @@ jobs:
           - name: build source code
             run: npm run build
 
+          - run: npm config set _authToken=${{ secrets.NPM_TOKEN }}
+
           - name: publish
             run: npm publish --access=public
-            env:
-              NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
