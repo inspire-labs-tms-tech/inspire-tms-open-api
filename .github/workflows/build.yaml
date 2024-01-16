@@ -37,3 +37,8 @@ jobs:
         uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
+
+      - name: release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.check.outputs.version }}

@@ -4,6 +4,10 @@ A Typescript OpenAPI client for Inspire TMS.
 
 ## Quick Start
 
+```shell
+npm i @inspire-labs-tms-tech/inspire-tms-open-api
+```
+
 - Hosted Instance:
 
 ```typescript
