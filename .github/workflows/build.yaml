@@ -1,0 +1,58 @@
+name: Release
+on:
+    push:
+jobs:
+    build:
+        name: Build Source Code
+        runs-on: ubuntu-latest
+        steps:
+          - name: checkout
+            uses: actions/checkout@v4
+    
+          - name: setup
+            uses: actions/setup-node@v3
+            with:
+              node-version: '20.x'
+    
+          - run: npm ci
+    
+          - name: check version change
+            id: version
+            uses: EndBug/version-check@v2
+            with:
+              diff-search: true
+              token: ${{ secrets.GITHUB_TOKEN }}
+    
+          - name: verify version change
+            if: steps.version.outputs.changed == 'false'
+            run: 'echo "VERSION CHANGE NOT DETECTED" && exit 1'
+
+          - name: generate client
+            run: npm run types
+
+          - name: build source code
+            run: npm run build
+
+    create-api-clients:
+        name: API Clients Build Test
+        runs-on: ubuntu-latest
+        needs: build
+        strategy:
+            matrix:
+                target: [java, javascript, typescript-axios, python]
+        steps:
+            - name: checkout
+              uses: actions/checkout@v3
+
+            - name: Generate Java Client
+              uses: openapi-generators/openapitools-generator-action@v1
+              with:
+                generator: ${{ matrix.target }}
+                openapi-file: public/openapi.yaml
+
+            - name: Upload Client
+              uses: actions/upload-artifact@v4
+              with:
+                name: ${{ matrix.target }}
+                path: ./${{ matrix.target }}-client
+                if-no-files-found: error

@@ -17,7 +17,7 @@ servers:
     variables:
       server:
         description: the unique app-name of the server hosting the Inspire TMS instance
-        default: sandbox
+        default: _
 tags:
   - name: Load Tenders
 paths:
