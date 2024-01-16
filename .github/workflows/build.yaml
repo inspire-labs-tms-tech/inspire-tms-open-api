@@ -1,39 +1,39 @@
 name: Release
 on:
-    push:
+  push:
 jobs:
-    build:
-        name: Build Source Code
-        runs-on: ubuntu-latest
-        steps:
-          - name: checkout
-            uses: actions/checkout@v4
-    
-          - name: setup
-            uses: actions/setup-node@v3
-            with:
-              node-version: '20.x'
-    
-          - run: npm ci
-    
-          - name: check version change
-            id: version
-            uses: EndBug/version-check@v2
-            with:
-              diff-search: true
-              token: ${{ secrets.GITHUB_TOKEN }}
-    
-          - name: verify version change
-            if: steps.version.outputs.changed == 'false'
-            run: 'echo "VERSION CHANGE NOT DETECTED" && exit 1'
+  build:
+    name: Build Source Code
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
 
-          - name: generate client
-            run: npm run types
+      - name: setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
 
-          - name: build source code
-            run: npm run build
+      - run: npm ci
 
-          - run: npm config set _authToken=${{ secrets.NPM_TOKEN }}
+      - name: check version change
+        id: version
+        uses: EndBug/version-check@v2
+        with:
+          diff-search: true
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-          - name: publish
-            run: npm publish --access=public
+      - name: verify version change
+        if: steps.version.outputs.changed == 'false'
+        run: 'echo "VERSION CHANGE NOT DETECTED" && exit 1'
+
+      - name: generate client
+        run: npm run types
+
+      - name: build source code
+        run: npm run build
+
+      - name: publish
+        run: npm publish --access=public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
