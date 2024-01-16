@@ -1,6 +1,6 @@
 {
   "name": "@inspire-labs-tms-tech/inspire-tms-open-api",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "An OpenAPI Client for Inspire TMS",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
