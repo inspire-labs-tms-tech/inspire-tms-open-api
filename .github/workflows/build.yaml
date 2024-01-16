@@ -41,4 +41,4 @@ jobs:
       - name: release
         uses: ncipollo/release-action@v1
         with:
-          tag: ${{ steps.check.outputs.version }}
+          tag: ${{ steps.version.outputs.version }}
