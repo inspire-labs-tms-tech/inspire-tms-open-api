@@ -3,6 +3,8 @@ import { LoadTendersApi } from "@inspire-labs-tms-tech/inspire-tms-open-api/gen"
 
 
 
+export * from "@inspire-labs-tms-tech/inspire-tms-open-api/gen";
+
 export class InspireTMS {
 
   private readonly _loadTenderAPI: LoadTendersApi;
