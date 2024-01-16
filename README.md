@@ -1,6 +1,6 @@
 # @inspire-labs-tms-tech/inspire-tms-open-api
 
-An OpenAPI client for Typescript.
+A Typescript OpenAPI client for Inspire TMS.
 
 ## Quick Start
 
