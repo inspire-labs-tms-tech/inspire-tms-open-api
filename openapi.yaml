@@ -1,0 +1,308 @@
+openapi: 3.0.3
+info:
+  title: Inspire TMS - OpenAPI 1.0
+  description: Inspire TMS exposes an OpenAPI endpoint to allow for load tenders and other information to be passed in realtime across other Inspire TMS instances and external services.
+  termsOfService: https://inspiretmstech.com/terms-of-service/
+  contact:
+    email: support@inspiretmstech.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.1
+externalDocs:
+  description: Find out more about Inspire TMS
+  url: https://inspiretmstech.com/
+servers:
+  - url: https://{server}.app.inspiretmsconnect.com/api/v1/open-api
+    variables:
+      server:
+        description: the unique app-name of the server hosting the Inspire TMS instance
+        default: sandbox
+tags:
+  - name: Load Tenders
+paths:
+  /tender:
+    post:
+      tags: 
+        - Load Tenders
+      summary: Create a load tender
+      description: Send a new load tender to an Inspire TMS operator. The load will become immediately available in the Inspire TMS dashboard for review by a user with access.
+      operationId: createLoadTender
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoadTender'
+      responses:
+        '201':
+          description: load was successfully tendered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoadTenderSuccessResponse'
+        '500':
+          description: an internal server error prevented the load from successfully updating
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /tender/{id}:
+    put:
+      tags:
+        - Load Tenders
+      summary: Update a load tender
+      description: Update a load tender already sent to an Inspire TMS operator. The changes will require review in the Inspire TMS dashboard.
+      operationId: updateLoadTender
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: the load tenderer's unique id that was returned when originally tendering the load
+          schema:
+            type: string
+            format: UUID
+            example: 35a3c78a-f89b-4137-8c8b-5d40449a7ba9
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoadTender'
+      responses:
+        '200':
+          description: the load tender was successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+        '500':
+          description: an internal server error prevented the load from successfully updating
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /tender/{id}/accept:
+    post:
+      tags:
+        - Load Tenders
+      summary: Accept a load tender
+      description: Accept a load that was tendered from Inspire TMS
+      operationId: acceptLoadTender
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: the load tenderer's unique id that was passed when originally tendering the load (`LoadTender.id`)
+          schema:
+            type: string
+            format: UUID
+            example: 35a3c78a-f89b-4137-8c8b-5d40449a7ba9
+      responses:
+        '200':
+          description: the load tender was successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+        '500':
+          description: an internal server error prevented the load from successfully accepting
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /tender/{id}/decline:
+    post:
+      tags:
+        - Load Tenders
+      summary: Decline a load tender
+      description: Decline a load that was tendered from Inspire TMS
+      operationId: declineLoadTender
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: the load tenderer's unique id that was passed when originally tendering the load (`LoadTender.id`)
+          schema:
+            type: string
+            format: UUID
+            example: 35a3c78a-f89b-4137-8c8b-5d40449a7ba9
+      responses:
+        '200':
+          description: the load tender was successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+        '500':
+          description: an internal server error prevented the load from successfully accepting
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      description: generic wrapper for error responses
+      required:
+        - status
+        - error
+      properties:
+        status:
+          type: number
+          example: 500
+        error:
+          type: string
+          example: internal server error
+          description: a short message of what error occurred
+        details:
+          type: string
+          description: an extended message for debugging purposes
+    Address:
+      type: object
+      description: a geographical address of a physical structure
+      required:
+        - street_address_1
+        - city
+        - state
+        - zip_code
+      properties:
+        street_address_1:
+          type: string
+          example: 1600 Pennsylvania Avenue NW
+        street_address_2:
+          type: string
+        city:
+          type: string
+          example: Washington
+        state:
+          type: string
+          example: District of Columbia
+        zip_code:
+          type: string
+          example: 20500
+    RevenueItem:
+      type: object
+      description: a monetary amount to be paid to the Inspire TMS operator by the load tenderer
+      required:
+        - quantity
+        - rate
+      properties:
+        quantity:
+          type: integer
+          example: 1
+          minimum: 1
+          description: the rate-multiplier based on the quantity of items at the per-item rate
+        rate:
+          type: number
+          format: currency
+          minimum: 0.01
+          maximum: 99999.99
+          description: per-item rate (in USD)
+    Customer:
+      type: object
+      description: a person or company doing business with the Inspire TMS operator
+      required:
+        - id
+        - secret
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: the Customer ID in Inspire TMS (must be provided by the Inspire TMS operator)
+          example: ee4c7f24-9cd8-4e11-b65a-5c6d065d1378
+        secret:
+          type: string
+          format: password
+          description: (optional) a unique secret in Inspire TMS (if used, must be provided by the Inspire TMS operator)
+          example: wMeUj-na$F_)TF)9
+    Stop:
+      type: object
+      description: a location for a pick-up or drop-off on a the load
+      required:
+        - id
+        - type
+        - address
+        - earliest_arrival
+        - latest_arrival
+      properties:
+        id:
+          type: string
+          description: a unique identifier for the stop (for the load) in the tendering party's system (will be relayed in future transmissions relating to this load tender); if no such value exists in the tendering party's system, use the numerical index number instead (as a string)
+          example: 12345x67890x1
+        type:
+          type: string
+          description: |-
+            - PICKUP: freight is being picked-up from this stop
+            - DROPOFF: freight is being dropped-off to this stop
+          enum:
+            - PICKUP
+            - DROPOFF
+        address:
+          $ref: '#/components/schemas/Address'
+        earliest_arrival:
+          type: string
+          format: ISO-8601
+          description: an ISO-8601 DateTime for the earliest time the Inspire TMS operator can arrive at the stop
+        latest_arrival:
+          type: string
+          format: ISO-8601
+          description: an ISO-8601 DateTime for the latest time the Inspire TMS operator can arrive at the stop
+    Load:
+      type: object
+      description: a load to be conveyed between parties
+      required:
+        - stops
+      properties:
+        reference:
+          type: string
+          description: a human-readable identifier for the load in the tendering party's system (will be displayed on human-facing documents, such as invoices)
+          example: Order 12345
+        revenue:
+          type: array
+          description: the total revenue that the Inspire TMS operator would earn for completion of the load
+          items:
+            $ref: '#/components/schemas/RevenueItem'
+        stops:
+          type: array
+          description: the stops that comprise the load
+          items:
+            $ref: '#/components/schemas/Stop'
+    LoadTender:
+      type: object
+      required:
+        - customer
+        - load
+        - replyTo
+      properties:
+        replyTo:
+          type: object
+          required:
+            - accept
+            - decline
+          properties:
+            accept:
+              type: string
+              format: URL
+              example: https://example.com/load-tenders/12345/accept
+              description: the HTTP(S) URL where Inspire TMS should **POST** a response to the load tender (empty body)
+            decline:
+              type: string
+              format: URL
+              example: https://example.com/load-tenders/12345/decline
+              description: the HTTP(S) URL where Inspire TMS should **POST** a response to the load tender (empty body)
+        customer:
+          $ref: '#/components/schemas/Customer'
+        load:
+          $ref: '#/components/schemas/Load'
+    LoadTenderSuccessResponse:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: UUID
+          example: 35a3c78a-f89b-4137-8c8b-5d40449a7ba9
+          description: a unique identifier for the load in Inspire TMS (for reference in future transactions related to this tender)
