@@ -21,6 +21,23 @@ servers:
 tags:
   - name: Load Tenders
 paths:
+  /about:
+    get:
+      summary: Retrieve basic (public) information about an Inspire TMS instance
+      description: Load the version of Inspire TMS installed. Additionally, retrieve public supabase keys.
+      responses:
+        '200':
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AboutResponse'
+        '500':
+          description: an internal server error prevented the load from successfully updating
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /tender:
     post:
       tags: 
@@ -296,6 +313,35 @@ components:
           $ref: '#/components/schemas/Customer'
         load:
           $ref: '#/components/schemas/Load'
+    AboutResponse:
+      type: object
+      required:
+        - version
+        - supabase
+      properties:
+        version:
+          type: string
+          description: a short identifier for the current build version
+        supabase:
+          type: object
+          required:
+            - url
+            - keys
+          properties:
+            url:
+              type: string
+              format: URL
+              description: the public supabase URL
+            keys:
+              type: object
+              required:
+                - anon
+              properties:
+                anon:
+                  type: string
+                  description: the public supabase (anonymous) key
+
+
     LoadTenderSuccessResponse:
       type: object
       required:
