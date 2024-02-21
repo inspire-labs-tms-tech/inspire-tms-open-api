@@ -20,11 +20,15 @@ servers:
         default: _
 tags:
   - name: Load Tenders
+  - name: About
 paths:
   /about:
     get:
+      tags:
+        - About
       summary: Retrieve basic (public) information about an Inspire TMS instance
       description: Load the version of Inspire TMS installed. Additionally, retrieve public supabase keys.
+      operationId: getAbout
       responses:
         '200':
           description: successful response
