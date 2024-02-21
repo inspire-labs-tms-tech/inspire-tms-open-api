@@ -318,10 +318,26 @@ components:
       required:
         - version
         - supabase
+        - company
       properties:
         version:
           type: string
           description: a short identifier for the current build version
+        company:
+          type: object
+          description: details about the Inspire TMS company
+          required:
+            - name
+            - published
+            - logo
+          properties:
+            name:
+              type: string
+            published:
+              type: boolean
+            logo:
+              type: string
+              format: URL
         supabase:
           type: object
           required:
