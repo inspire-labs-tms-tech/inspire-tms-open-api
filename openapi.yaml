@@ -336,8 +336,10 @@ components:
             published:
               type: boolean
             logo:
-              type: string
-              format: URL
+              oneOf:
+                - type: string
+                  format: URL
+                - type: "null"
         supabase:
           type: object
           required:
