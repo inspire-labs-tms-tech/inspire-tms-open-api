@@ -1,7 +1,6 @@
 import { BASE_PATH } from "@inspire-labs-tms-tech/inspire-tms-open-api/gen/base";
 import { LoadTendersApi } from "@inspire-labs-tms-tech/inspire-tms-open-api/gen";
-
-
+export type { paths } from "@inspire-labs-tms-tech/inspire-tms-open-api/gen/openapi";
 
 export * from "@inspire-labs-tms-tech/inspire-tms-open-api/gen";
 
