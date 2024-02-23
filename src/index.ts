@@ -29,7 +29,7 @@ export class InspireTMS {
   }
 
   public static OpenAPIURL(): string {
-    return "__INSPIRETMS_VERSION__";
+    return "https://github.com/inspire-labs-tms-tech/inspire-tms-open-api/releases/download/__INSPIRETMS_VERSION__/openapi.yaml";
   }
 
 }
