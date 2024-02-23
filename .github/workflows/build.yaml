@@ -22,9 +22,9 @@ jobs:
 
       - name: persist version
         run: |
-          sed -i 's|__INSPIRETMS_VERSION__|${{ steps.version.outputs.version }}/g' ./openapi.yaml
-          sed -i 's|__INSPIRETMS_VERSION__|${{ steps.version.outputs.version }}/g' ./src/index.ts
-          sed -i 's|__INSPIRETMS_VERSION__|${{ steps.version.outputs.version }}/g' ./README.md
+          sed -i -e 's|__INSPIRETMS_VERSION__|${{ steps.version.outputs.version }}|g' ./openapi.yaml
+          sed -i -e 's|__INSPIRETMS_VERSION__|${{ steps.version.outputs.version }}|g' ./src/index.ts
+          sed -i -e 's|__INSPIRETMS_VERSION__|${{ steps.version.outputs.version }}|g' ./README.md
 
       - name: setup
         uses: actions/setup-node@v3
