@@ -29,7 +29,7 @@ export class InspireTMS {
   }
 
   public static OpenAPIURL(): string {
-    return "_INSPIRETMS_%_____VERSION_____%_INSPIRETMS_";
+    return "__INSPIRETMS_VERSION__";
   }
 
 }

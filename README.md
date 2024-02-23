@@ -1,4 +1,4 @@
-# @inspire-labs-tms-tech/inspire-tms-open-api `_INSPIRETMS_%_____VERSION_____%_INSPIRETMS_`
+# @inspire-labs-tms-tech/inspire-tms-open-api `__INSPIRETMS_VERSION__`
 
 A Typescript OpenAPI client for Inspire TMS.
 

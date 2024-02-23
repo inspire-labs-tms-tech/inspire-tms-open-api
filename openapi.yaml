@@ -8,7 +8,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: _INSPIRETMS_%_____VERSION_____%_INSPIRETMS_
+  version: __INSPIRETMS_VERSION__
 externalDocs:
   description: Find out more about Inspire TMS
   url: https://inspiretmstech.com/
