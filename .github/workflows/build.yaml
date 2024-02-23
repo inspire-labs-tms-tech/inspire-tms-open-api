@@ -21,7 +21,10 @@ jobs:
         run: 'echo "VERSION CHANGE NOT DETECTED" && exit 1'
 
       - name: persist version
-        run: sed -i 's/_INSPIRETMS_%_____VERSION_____%_INSPIRETMS_/${{ steps.version.outputs.version }}/g' *
+        run: |
+          sed -i 's/_INSPIRETMS_%_____VERSION_____%_INSPIRETMS_/${{ steps.version.outputs.version }}/g' openapi.yaml
+          sed -i 's/_INSPIRETMS_%_____VERSION_____%_INSPIRETMS_/${{ steps.version.outputs.version }}/g' src/index.ts
+          sed -i 's/_INSPIRETMS_%_____VERSION_____%_INSPIRETMS_/${{ steps.version.outputs.version }}/g' README.md
 
       - name: setup
         uses: actions/setup-node@v3
