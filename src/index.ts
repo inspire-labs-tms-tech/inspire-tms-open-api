@@ -28,4 +28,8 @@ export class InspireTMS {
     return this._aboutAPI;
   }
 
+  public static OpenAPIURL(): string {
+    return "_INSPIRETMS_%_____VERSION_____%_INSPIRETMS_";
+  }
+
 }
