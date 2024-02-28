@@ -1,6 +1,6 @@
 {
   "name": "@inspire-labs-tms-tech/inspire-tms-open-api",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "An OpenAPI Client for Inspire TMS",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -10,9 +10,9 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "types": "npx openapi-typescript ./openapi.yaml -o ./src/gen/openapi.d.ts && openapi-generator-cli generate --generator-name typescript-axios --input-spec ./openapi.yaml --output src/gen",
-    "convert": "npx -y @openapitools/openapi-generator-cli generate -i openapi.yaml -g openapi -o tmp",
-    "build": "npm run types && tsup && npm run convert && cp tmp/openapi.json dist/openapi.json",
+    "types": "npx openapi-typescript ./openapi.yaml -o ./src/gen/openapi.d.ts && openapi-generator-cli generate --generator-name typescript-axios --input-spec ./openapi.yaml --output src/gen && npm run convert",
+    "convert": "npx -y @openapitools/openapi-generator-cli generate -i openapi.yaml -g openapi -o tmp && cp tmp/openapi.json src/openapi.json",
+    "build": "npm run types && tsup",
     "version-check": "node ./precommit.mjs "
   },
   "pre-commit": [

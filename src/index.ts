@@ -1,6 +1,7 @@
 import { BASE_PATH } from "@inspire-labs-tms-tech/inspire-tms-open-api/gen/base";
 import { AboutApi, LoadTendersApi } from "@inspire-labs-tms-tech/inspire-tms-open-api/gen";
 export type { paths } from "@inspire-labs-tms-tech/inspire-tms-open-api/gen/openapi";
+import OpenAPISpec from "./openapi.json";
 
 export * from "@inspire-labs-tms-tech/inspire-tms-open-api/gen";
 
@@ -15,6 +16,8 @@ export class InspireTMS {
     this._loadTenderAPI = new LoadTendersApi(undefined, this._baseURL);
     this._aboutAPI = new AboutApi(undefined, this._baseURL);
   }
+
+  public static OpenAPISpec = (): typeof OpenAPISpec => OpenAPISpec;
 
   get baseURL(): string {
     return this._baseURL;
