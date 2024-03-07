@@ -56,8 +56,13 @@ paths:
       externalDocs:
         description: the request type is defined by Orbcomm's Data Push Service
         url: https://documenter.getpostman.com/view/1578800/TVYCBLqC#afaf0f9f-05f0-44ee-9271-5934299a6182
-      security:
-        - bearerAuth: []
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            description: A bearer token in the format of `Bearer <token>`
+            example: Bearer 1234567890abcdefghijklmnopqrstuvwxyz
       requestBody:
         required: true
         content:
@@ -203,13 +208,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      in: header
-      name: Authorization
-      description: "Bearer-token passed as `Authorization: Bearer <token>` in the headers"
   schemas:
     ErrorResponse:
       type: object
