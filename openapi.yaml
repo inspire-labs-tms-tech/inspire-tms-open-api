@@ -67,8 +67,16 @@ paths:
       responses:
         '200':
           description: the webhook was accepted successfully
+          content:
+            application/json:
+              schema:
+                type: object
         '401':
           description: the authentication credentials were invalid
+          content:
+            application/json:
+              schema:
+                type: object
         '500':
           description: an internal server error prevented the load from successfully updating
           content:
