@@ -19,8 +19,9 @@ servers:
         description: the unique app-name of the server hosting the Inspire TMS instance
         default: _
 tags:
-  - name: Load Tenders
   - name: About
+  - name: Integrations
+  - name: Load Tenders
 paths:
   /about:
     post:
@@ -40,6 +41,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AboutResponse'
+        '500':
+          description: an internal server error prevented the load from successfully updating
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /integrations/orbcomm/data-push-inlet:
+    post:
+      tags:
+        - Integrations
+      summary: Orbcomm ELD Webhook Intake/Inlet
+      description: a near-realtime webhook allowing Orbcomm to send tracking information as it becomes available
+      externalDocs:
+        description: the request type is defined by Orbcomm's Data Push Service
+        url: https://documenter.getpostman.com/view/1578800/TVYCBLqC#afaf0f9f-05f0-44ee-9271-5934299a6182
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrbcommWebhook'
+      responses:
+        '200':
+          description: the webhook was accepted successfully
+        '401':
+          description: the authentication credentials were invalid
         '500':
           description: an internal server error prevented the load from successfully updating
           content:
@@ -166,6 +195,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      in: header
+      name: Authorization
+      description: "Bearer-token passed as `Authorization: Bearer <token>` in the headers"
   schemas:
     ErrorResponse:
       type: object
@@ -363,8 +399,6 @@ components:
                 anon:
                   type: string
                   description: the public supabase (anonymous) key
-
-
     LoadTenderSuccessResponse:
       type: object
       required:
@@ -375,3 +409,60 @@ components:
           format: UUID
           example: 35a3c78a-f89b-4137-8c8b-5d40449a7ba9
           description: a unique identifier for the load in Inspire TMS (for reference in future transactions related to this tender)
+    OrbcommWebhookDataAssetStatus:
+      type: object
+      properties:
+        assetName:
+          type: string
+        assetType:
+          type: string
+        deviceSN:
+          type: string
+        eventHasCurrentGPS:
+          type: string # Should this be boolean instead?
+        messageReceivedStamp:
+          type: string
+        messageStamp:
+          type: string
+        messageType:
+          type: string
+        productType:
+          type: string
+    OrbcommWebhookDataPositionStatus:
+      type: object
+      properties:
+        address:
+          type: string
+        geofenceDetails:
+          type: array
+          items: { }
+        latitude:
+          type: number
+        longitude:
+          type: number
+    OrbcommWebhookData:
+      type: object
+      properties:
+        assetStatus:
+          $ref: '#/components/schemas/OrbcommWebhookDataAssetStatus'
+        genericSensors:
+          type: object # You might want to define a schema for this
+        positionStatus:
+          $ref: '#/components/schemas/OrbcommWebhookDataPositionStatus'
+        reeferStatus:
+          type: object # You might want to define a schema for this
+    OrbcommWebhook:
+      type: object
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+        exception:
+          type: boolean
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrbcommWebhookData'
+        measurementUnits:
+          type: object # You might want to define a schema for this
