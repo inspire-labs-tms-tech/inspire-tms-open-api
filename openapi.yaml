@@ -417,6 +417,8 @@ components:
           description: a unique identifier for the load in Inspire TMS (for reference in future transactions related to this tender)
     OrbcommWebhookDataAssetStatus:
       type: object
+      required:
+        - assetName
       properties:
         assetName:
           type: string
@@ -448,6 +450,8 @@ components:
           type: number
     OrbcommWebhookData:
       type: object
+      required:
+        - assetStatus
       properties:
         assetStatus:
           $ref: '#/components/schemas/OrbcommWebhookDataAssetStatus'
@@ -459,6 +463,8 @@ components:
           type: object # You might want to define a schema for this
     OrbcommWebhook:
       type: object
+      required:
+        - data
       properties:
         code:
           type: number
