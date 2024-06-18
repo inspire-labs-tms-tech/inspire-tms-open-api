@@ -47,6 +47,56 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /integrations/gp/load-tenders:
+    post:
+      tags:
+        - Integrations
+      summary: Georgia Pacific EDI inlet
+      description: a webhook intake endpoint allowing for EDI 990 Load Tender documents to be transmitted from Georgia Pacific (via Zenbridge)
+      responses:
+        '200':
+          description: the webhook was accepted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: the authentication credentials were invalid
+          content:
+            application/json:
+              schema:
+                type: object
+        '500':
+          description: an internal server error prevented the load from successfully updating
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /integrations/dsg/load-tenders:
+    post:
+      tags:
+        - Integrations
+      summary: Dicks Sporting Goods EDI inlet
+      description: a webhook intake endpoint allowing for EDI 990 Load Tender documents to be transmitted from Dicks Sporting Goods (via Zenbridge)
+      responses:
+        '200':
+          description: the webhook was accepted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: the authentication credentials were invalid
+          content:
+            application/json:
+              schema:
+                type: object
+        '500':
+          description: an internal server error prevented the load from successfully updating
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /integrations/orbcomm/data-push-inlet:
     post:
       tags:
@@ -90,14 +140,14 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /tender:
     post:
-      tags: 
+      tags:
         - Load Tenders
       summary: Create a load tender
       description: Send a new load tender to an Inspire TMS operator. The load will become immediately available in the Inspire TMS dashboard for review by a user with access.
       operationId: createLoadTender
       requestBody:
         required: true
-        content: 
+        content:
           application/json:
             schema:
               $ref: '#/components/schemas/LoadTender'
