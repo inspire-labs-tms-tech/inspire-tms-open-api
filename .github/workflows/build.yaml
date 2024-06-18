@@ -5,6 +5,11 @@ jobs:
   build:
     name: Build Source Code
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -39,7 +44,10 @@ jobs:
       - name: build source code
         run: npm run build
 
-      - name: publish
+      - name: publish to GHPR
+        run: npm publish
+
+      - name: publish to NPM
         uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
