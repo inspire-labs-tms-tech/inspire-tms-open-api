@@ -22,6 +22,7 @@ tags:
   - name: About
   - name: Integrations
   - name: Load Tenders
+  - name: Facilities
 paths:
   /about:
     post:
@@ -43,6 +44,65 @@ paths:
                 $ref: '#/components/schemas/AboutResponse'
         '500':
           description: an internal server error prevented the load from successfully updating
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /facilities:
+    post:
+      tags:
+        - Facilities
+      summary: Create Facility
+      description: create a new facility object by passing in location and logistics information
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - address
+              properties:
+                name:
+                  type: string
+                  example: ABC 123 Hardware Store
+                  description: the display name to use for the facility
+                loadingContact:
+                  $ref: '#/components/schemas/Contact'
+                receivingContact:
+                  $ref: '#/components/schemas/Contact'
+                address:
+                  $ref: '#/components/schemas/Address'
+                notes:
+                  description: notes to add to the facility, such as directions
+                  type: array
+                  example:
+                    - example first note
+                    - example second note
+                  items:
+                    type: string
+                isActive:
+                  type: boolean
+                  default: true
+                  example: true
+                  description: whether to mark the facility as active (`true`, default) or inactive (`false`)
+      responses:
+        '201':
+          description: the facility was successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    type: string
+                    description: the UUID of the created facility
+                    example: '34de7a24-a8b9-4f85-a7f0-7aca47294c03'
+        '500':
+          description: an internal server error prevented the facility from being created
           content:
             application/json:
               schema:
@@ -276,6 +336,32 @@ components:
         details:
           type: string
           description: an extended message for debugging purposes
+    Contact:
+      type: object
+      description: contact information for a person or organization
+      minProperties: 1
+      properties:
+        email:
+          type: string
+          description: a valid email address
+          example: foo.bar@example.com
+        telephone:
+          type: object
+          description: "a E.164 standardized phone number: [+][country code][area code][subscriber number]"
+          example: +12125550100
+        name:
+          type: object
+          description: the first and last name of the contact
+          required:
+            - first
+            - last
+          properties:
+            first:
+              type: string
+              example: Foo
+            last:
+              type: string
+              example: Bar
     Address:
       type: object
       description: a geographical address of a physical structure
