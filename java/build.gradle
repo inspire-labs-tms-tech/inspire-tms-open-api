@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.1'
+    id 'io.spring.dependency-management' version '1.1.5'
+}
+
+group = 'com.inspiretmstech'
+version = System.getenv("VERSION") ?: "latest"
+
+repositories {
+    mavenCentral()
+    maven {
+        url = uri("https://maven.pkg.github.com/inspire-labs-tms-tech/inspire-tms-db")
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("GH_USER")
+            password = project.findProperty("gpr.key") ?: System.getenv("GH_TOKEN")
+        }
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'com.inspiretmstech:db:0.10.5'
+}

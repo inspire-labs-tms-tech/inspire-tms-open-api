@@ -20,9 +20,11 @@ servers:
         default: _
 tags:
   - name: About
-  - name: Integrations
-  - name: Load Tenders
   - name: Facilities
+  - name: Load Tenders
+  - name: Integrations
+security:
+  - BearerAuth: []
 paths:
   /about:
     post:
@@ -318,6 +320,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: id:secret
   schemas:
     ErrorResponse:
       type: object
